@@ -69,14 +69,13 @@ function MainTabs() {
 }
 
 function Routes() {
-  const {user} = useAuth();
+  const auth = useAuth();
 
- 
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {user ? (
+        {auth ? (
           <>
             <Stack.Screen
               name="MainTabs"

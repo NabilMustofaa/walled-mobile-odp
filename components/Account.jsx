@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { useAuth } from '../context/AuthContext'
 
 
 const Account = () => {
+  const {userData} = useAuth();
   return (
     <View
     style={{
@@ -20,7 +22,7 @@ const Account = () => {
       Account No.
     </Text>
     <Text style={{ fontSize: 16, fontWeight: "bold", color: "#fff" }}>
-      123456789
+      {userData.account_no}
     </Text>
   </View>
   )

@@ -18,13 +18,13 @@ const LoginPage = () => {
       const userData = {
         email,
         password
-      }
-
+      } 
+      console.log(userData,"ini data");
       const data = await loginUser(userData)
+      console.log(data);
       alert(data.message)
-      console.log(data)
-      login(data.access_token)
-      navigation.navigate("MainTabs")
+      login(data.data.token)
+
 
     } catch (error) {
       alert(error.message)

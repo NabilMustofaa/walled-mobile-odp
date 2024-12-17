@@ -8,11 +8,30 @@ import {
 	TouchableOpacity,
 	Button,
 } from "react-native";
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import TransactionItem from "./TransactionItem";
+import { getTransaction } from "../api/transactionApi";
+import { useAuth } from "../context/AuthContext";
 
 const TransactionList = () => {
+	const {userData} = useAuth();
+	const [transactions, setTransactions] = useState([]);
+
+	const fetchTransactions = async () => {
+		try {
+			const data = await getTransaction();
+			console.log(data);
+			setTransactions(data.data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	useEffect(() => {
+		fetchTransactions();
+	}, [userData]);
+
   return (
     <View
 				style={{
@@ -37,11 +56,12 @@ const TransactionList = () => {
 					Transaction History
 				</Text>
 				<ScrollView>
-					<TransactionItem />
-          <TransactionItem />
-          <TransactionItem />
-          <TransactionItem />
-          <TransactionItem />
+					{
+						transactions.map((transaction) => (
+							<TransactionItem key={transaction.id} {...transaction} />
+						))
+					}
+
 				</ScrollView>
 			</View>
   )

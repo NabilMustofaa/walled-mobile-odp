@@ -21,10 +21,14 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import TransactionList from "../components/TransactionList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../context/AuthContext";
 
 export default function HomePage() {
 	// const navigation = useNavigation();
 	// navigation.navigate("Login");
+
+	const {user} = useAuth();
+	console.log(user)
 	return (
 		<SafeAreaView style={styles.container}>
       <StatusBar style="auto" />

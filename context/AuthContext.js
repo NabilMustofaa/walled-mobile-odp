@@ -1,53 +1,65 @@
 import React, { useEffect, useState } from "react";
 import { createContext, useContext } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { loginUser } from "../api/authApi";
+import { getUser } from "../api/userApi";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import api from "../api/api";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const accessToken = await AsyncStorage.getItem('access_token');
-        setIsLoggedIn(accessToken !== null);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    checkLoginStatus();
-  }, []);
+	const [userData, setUserData] = useState({});
 
-  const login = async (token) => {
-    setUser({token});
-      await AsyncStorage.setItem('access_token', data.access_token);
-      
-  }
+	//set header authorization
+	const refreshToken = async () => {
+		console.log(user, "ini context");
+		api.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
+	};
 
+	const fetchUser = async () => {
+		const response = await getUser();
+		console.log(response, "response");
+		setUserData(response.data);
+	};
+	useEffect(() => {
+		refreshToken();
 
-  const logout = async () => {
-    setUser(null);
-    await AsyncStorage.removeItem('access_token');
-  };
+		if (user) {
+			fetchUser();
+		}
+	}, [user]);
 
-  return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+	const login = async (token) => {
+		setUser({ token });
+		await AsyncStorage.setItem("access_token", token);
+		console.log(token);
+	};
+
+	const logout = async () => {
+		setUser(null);
+		await AsyncStorage.removeItem("access_token");
+	};
+
+	return (
+		<AuthContext.Provider
+			value={{ isLoggedIn, user, login, logout, userData, fetchUser }}
+		>
+			{children}
+		</AuthContext.Provider>
+	);
 };
 
 const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+	const context = useContext(AuthContext);
+	if (context === undefined) {
+		throw new Error("useAuth must be used within an AuthProvider");
+	}
+	return context;
 };
 
 export { AuthProvider, useAuth };

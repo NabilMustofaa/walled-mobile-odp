@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View,Image } from 'react-native'
 import React from 'react'
 const profile = require("../assets/profile.png");
-const TransactionItem = () => {
+const TransactionItem = ({amount,type,description,created_at}) => {
   return (
 <View
 						style={{
@@ -17,12 +17,12 @@ const TransactionItem = () => {
 						>
 							<Image source={profile} style={{ width: 50, height: 50 }} />
 							<View>
-								<Text style={{ fontSize: 16, fontWeight: "bold" }}>Nabil Mustofa</Text>
-								<Text style={{ fontSize: 14 }}>Transfer</Text>
-								<Text style={{ fontSize: 12, color: "gray" }}>08 December 2024</Text>
+								<Text style={{ fontSize: 16, fontWeight: "bold" }}>{description}</Text>
+								<Text style={{ fontSize: 14 }}>{type == "c" ? "Top Up" : "Transfer"}</Text>
+								<Text style={{ fontSize: 12, color: "gray" }}>{new Date(created_at).toLocaleString()}</Text>
 							</View>
 						</View>
-						<Text> - Rp. 100.000</Text>
+						<Text> {type == "c" ? "+" : "-"} Rp. {amount}</Text>
 					</View>
   )
 }

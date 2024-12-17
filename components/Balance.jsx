@@ -12,8 +12,10 @@ import React, { useState } from 'react'
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../context/AuthContext";
 
 const Balance = () => {
+  const {userData} = useAuth();
   const navigation = useNavigation();
 
   const [showBalance,setShowBalance] = useState(true)
@@ -33,7 +35,7 @@ const Balance = () => {
     <View style={{ flex: 1 }}>
       <Text style={{ fontSize: 18 }}>Balance</Text>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-        <Text style={{ fontSize: 24, fontWeight: "bold" }}>{showBalance ? "Rp. 100.000" : "Rp. ******"}</Text>
+        <Text style={{ fontSize: 24, fontWeight: "bold" }}>{showBalance ? `Rp. ${userData.balance}` : `********`}</Text>
         <Ionicons name={showBalance ? "eye-outline" : "eye-off-outline"} onPress={() => setShowBalance(!showBalance)} size={20} />
       </View>
     </View>

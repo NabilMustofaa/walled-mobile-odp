@@ -17,7 +17,7 @@ import { useAuth } from '../context/AuthContext';
 
 
 const navbar = ({name}) => {
-	const {logout} = useAuth();
+	const {logout,userData} = useAuth();
 	const handleLogout = () => {
 		console.log('logout');
 		logout();
@@ -39,13 +39,13 @@ const navbar = ({name}) => {
 					/>
 					<View>
 						<Text style={{ fontSize: 16, fontWeight: "semibold" }}>
-							Nabil Mustofa
+							{userData.full_name}
 						</Text>
-						<Text style={{ fontSize: 12 }}>React Native</Text>
+						<Text style={{ fontSize: 12 }}>{userData.account_no}</Text>
 					</View>
 				</View>
 				<Pressable onPress={() => handleLogout()}>
-					<Ionicons name="sunny-outline" color="#F8AB39" size={30} />
+					<Ionicons name="log-in-outline" color="#19918F" size={30} />
 				</Pressable>
 				</>
 			</View>

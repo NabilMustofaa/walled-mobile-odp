@@ -18,11 +18,10 @@ const RegisterPage = () => {
         password,
         phone_number: phone
       }
-
-
+      console.log(newUser);
       const data = await register(newUser)
       alert(data.message)
-      navigatation.navigate("Login")
+      // navigatation.navigate("Login")
 
 
 
