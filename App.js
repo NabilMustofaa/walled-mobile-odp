@@ -1,45 +1,114 @@
-import { StatusBar } from "expo-status-bar";
-import {
-	StyleSheet,
-	Text,
-	View,
-	Image,
-	ImageBackground,
-	ScrollView,
-	TouchableOpacity,
-	Button,
-} from "react-native";
+import React, { useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import Account from "./components/Account";
-import Balance from "./components/Balance";
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import TopUpPage from './pages/TopUpPage';
+import TransferPage from './pages/TransferPage';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
-const icon = require("./assets/adaptive-icon.png");
+const Stack = createNativeStackNavigator();
+const Tabs = createBottomTabNavigator();
 
-import Ionicons from "@expo/vector-icons/Ionicons";
-import TransactionList from "./components/TransactionList";
-import { SafeAreaView } from "react-native-safe-area-context";
-
-export default function App() {
-	return (
-		<SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
-			<Navbar />
-
-			<Hero />
-			<Account />
-
-			<Balance />
-			<TransactionList />
-    </SafeAreaView>
-	);
+function MainTabs() {
+  return (
+    <Tabs.Navigator initialRouteName="Home">
+      <Tabs.Screen
+        name="Home"
+        component={HomePage}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? 'home' : 'home-outline'}
+              size={24}
+              color={focused ? '#19918F' : '#19918F'}
+            />
+          ),
+          tabBarActiveTintColor: '#19918F',
+          tabBarInactiveTintColor: 'gray',
+        }}
+      />
+      <Tabs.Screen
+        name="TopUp"
+        component={TopUpPage}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? 'add-circle' : 'add-circle-outline'}
+              size={24}
+              color={focused ? '#19918F' : '#19918F'}
+            />
+          ),
+          tabBarActiveTintColor: '#19918F',
+          tabBarInactiveTintColor: 'gray',
+        }}
+      />
+      <Tabs.Screen
+        name="Transfer"
+        component={TransferPage}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? 'person-add' : 'person-add-outline'}
+              size={24}
+              color={focused ? '#19918F' : '#19918F'}
+            />
+          ),
+          tabBarActiveTintColor: '#19918F',
+          tabBarInactiveTintColor: 'gray',
+        }}
+      />
+    </Tabs.Navigator>
+  );
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		flexDirection: "column",
-		backgroundColor: "#FAFBFD",
-	},
-});
+function Routes() {
+  const {user} = useAuth();
+
+ 
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        {user ? (
+          <>
+            <Stack.Screen
+              name="MainTabs"
+              component={MainTabs}
+              options={{ headerShown: false }}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              name="Login"
+              component={LoginPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={RegisterPage}
+              options={{ headerShown: false }}
+            />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <SafeAreaProvider>
+        <Routes />
+      </SafeAreaProvider>
+    </AuthProvider>
+  );
+}

@@ -10,8 +10,12 @@ import {
 } from "react-native";
 import React, { useState } from 'react'
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Link } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 
 const Balance = () => {
+  const navigation = useNavigation();
+
   const [showBalance,setShowBalance] = useState(true)
   return (
     <View
@@ -34,6 +38,7 @@ const Balance = () => {
       </View>
     </View>
     <View style={{ gap: 10 }}>
+      
       <TouchableOpacity
         style={{
           backgroundColor: "#19918F",
@@ -41,9 +46,12 @@ const Balance = () => {
           borderRadius: 5,
           elevation: 5,
         }}
+       
+        onPress={() => {navigation.navigate("TopUp")}}
       >
         <Ionicons name="add-outline" color="#fff" size={20} />
       </TouchableOpacity>
+
       <TouchableOpacity
         style={{
           backgroundColor: "#19918F",
@@ -51,6 +59,8 @@ const Balance = () => {
           borderRadius: 5,
           elevation: 5,
         }}
+
+        onPress={() => {navigation.navigate("Transfer")}}
       >
         <Ionicons name="send-outline" color="#fff" size={20} />
       </TouchableOpacity>

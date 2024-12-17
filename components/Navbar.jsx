@@ -5,16 +5,26 @@ import {
 	Text,
 	View,
 	Image,
+	Pressable,
 } from "react-native";
 
 const profile = require("../assets/profile.png");
 const sun = require("../assets/sun.png");
 
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useAuth } from '../context/AuthContext';
 
-const navbar = () => {
+
+
+const navbar = ({name}) => {
+	const {logout} = useAuth();
+	const handleLogout = () => {
+		console.log('logout');
+		logout();
+	}
   return (
     <View style={styles.navbar}>
+				<>
 				<View
 					style={{
 						flexDirection: "row",
@@ -34,7 +44,10 @@ const navbar = () => {
 						<Text style={{ fontSize: 12 }}>React Native</Text>
 					</View>
 				</View>
-				<Ionicons name="sunny-outline" color="#F8AB39" size={30} />
+				<Pressable onPress={() => handleLogout()}>
+					<Ionicons name="sunny-outline" color="#F8AB39" size={30} />
+				</Pressable>
+				</>
 			</View>
   )
 }
