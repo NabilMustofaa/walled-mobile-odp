@@ -62,7 +62,7 @@ const TransactionList = () => {
 						))
 					}
 
-				</ScrollView>
+				</ScrollView><></>
 			</View>
   )
 }

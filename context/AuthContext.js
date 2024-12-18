@@ -11,7 +11,16 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [user, setUser] = useState(null);
+	const [user, setUser] = useState({})
+	
+		useEffect(() => {
+			AsyncStorage.getItem("access_token").then((token) => {
+				if (token) {
+					setUser({ token });
+					setIsLoggedIn(true);
+				}
+			})
+		}, []);
 
 	const [userData, setUserData] = useState({});
 
